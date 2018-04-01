@@ -10,18 +10,19 @@ while [[ RET -ne 0 ]]; do
     RET=$?
 done
 
-# PASS=${MYSQL_PASS:-$(pwgen -s 12 1)}
-# _word=$( [ ${MYSQL_PASS} ] && echo "preset" || echo "random" )
-# echo "=> Creating MySQL admin user with ${_word} password"
-echo "=> Creating MySQL admin user with 123456 password"
+PASS=123456
+_word=$( [ ${MYSQL_PASS} ] && echo "preset" || echo "random" )
+echo "=> Creating MySQL admin user with ${_word} password"
 
-mysql -uroot -e "CREATE USER 'admin'@'%' IDENTIFIED BY '$PASS'"
+# mysql -uroot -e 'CREATE DATABASE IF NOT EXISTS SW CHARACTER SET UTF8'
+# mysql -uroot -e 'CREATE TABLE IF NOT EXISTS SW.ESTUDIANTES(id INT NOT NULL AUTO_INCREMENT, nombre VARCHAR(100) NOT NULL, PRIMARY KEY ( id ))'
+# mysql -uroot -e "CREATE USER IF NOT EXISTS 'admin'@'%' IDENTIFIED BY '$PASS'"
+# mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION"
+
+mysql -uroot -e 'CREATE DATABASE IF NOT EXISTS estudiantesbd CHARACTER SET UTF8'
+mysql -uroot -e 'CREATE TABLE IF NOT EXISTS estudiantesbd.estudiante ( idestudiante int(11) primary key, nombre varchar(45), codigo varchar(45), telefono varchar(45), semestre varchar(45) )'
+mysql -uroot -e "CREATE USER IF NOT EXISTS 'admin'@'%' IDENTIFIED BY '$PASS'"
 mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION"
-
-# You can create a /mysql-setup.sh file to intialized the DB
-if [ -f /mysql-setup.sh ] ; then
-  . /mysql-setup.sh
-fi
 
 echo "=> Done!"
 
